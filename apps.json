@@ -96,6 +96,7 @@
       "$WshShell = New-Object -ComObject WScript.Shell",
       "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $app + '.lnk')",
       "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+      "$Shortcut.IconLocation = (Join-Path $dir $manifest.shortcuts[0][0]) + ',0'",
       "$Shortcut.Save()"
     ],
     "pre_uninstall": [
@@ -125,6 +126,7 @@
       "$WshShell = New-Object -ComObject WScript.Shell",
       "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $app + '.lnk')",
       "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+      "$Shortcut.IconLocation = (Join-Path $dir $manifest.shortcuts[0][0]) + ',0'",
       "$Shortcut.Save()"
     ],
     "pre_uninstall": [
