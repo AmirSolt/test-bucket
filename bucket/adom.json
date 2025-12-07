@@ -9,12 +9,13 @@
     "bin": "adom.exe",
     "post_install": [
         "$WshShell = New-Object -ComObject WScript.Shell",
-        "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $app + '.lnk')",
+        "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $manifest.shortcuts[0][0] + '.lnk')",
         "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+        "$Shortcut.Description = \"id=$app\"",
         "$Shortcut.Save()"
     ],
     "pre_uninstall": [
-        "Remove-Item -Path (Join-Path ([Environment]::GetFolderPath('Desktop')) \"$app.lnk\") -ErrorAction SilentlyContinue"
+        "Remove-Item -Path (Join-Path ([Environment]::GetFolderPath('Desktop')) ($manifest.shortcuts[0][0] + '.lnk')) -ErrorAction SilentlyContinue"
     ],
     "shortcuts": [
         [
