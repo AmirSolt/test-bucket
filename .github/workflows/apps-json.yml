@@ -1,0 +1,48 @@
+name: Generate apps.json
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bucket/**'
+      - '.github/workflows/apps-json.yml'
+  workflow_dispatch:
+
+jobs:
+  generate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate apps.json
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $apps = [Ordered]@{}
+          $files = Get-ChildItem "bucket/*.json" | Sort-Object Name
+          
+          foreach ($file in $files) {
+              try {
+                  $content = Get-Content $file.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+                  $apps[$file.BaseName] = $content
+              }
+              catch {
+                  Write-Warning "Failed to process $($file.Name): $_"
+              }
+          }
+          
+          $apps | ConvertTo-Json -Depth 20 | Set-Content "apps.json" -Encoding UTF8
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update apps.json [skip ci]"
+            git push
+          fi
