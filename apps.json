@@ -121,6 +121,15 @@
     "hash": "679182edf2df02cabbacf11a3b432ed087ccedda4323491e170be14a93114549",
     "extract_dir": "adom",
     "bin": "adom.exe",
+    "post_install": [
+      "$WshShell = New-Object -ComObject WScript.Shell",
+      "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $app + '.lnk')",
+      "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+      "$Shortcut.Save()"
+    ],
+    "pre_uninstall": [
+      "Remove-Item -Path (Join-Path ([Environment]::GetFolderPath('Desktop')) \"$app.lnk\") -ErrorAction SilentlyContinue"
+    ],
     "shortcuts": [
       [
         "adom.exe",
