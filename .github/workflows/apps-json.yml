@@ -24,15 +24,24 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $apps = [Ordered]@{}
+          
+          # Get all JSON files in the bucket directory
           $files = Get-ChildItem "bucket/*.json" | Sort-Object Name
           
-          foreach ($file in $files) {
-              try {
-                  $content = Get-Content $file.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
-                  $apps[$file.BaseName] = $content
-              }
-              catch {
-                  Write-Warning "Failed to process $($file.Name): $_"
+          if ($null -eq $files) {
+              Write-Warning "No JSON files found in bucket directory."
+          }
+          else {
+              Write-Host "Found $($files.Count) files."
+              
+              foreach ($file in $files) {
+                  try {
+                      $content = Get-Content $file.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+                      $apps[$file.BaseName] = $content
+                  }
+                  catch {
+                      Write-Warning "Failed to process $($file.Name): $_"
+                  }
               }
           }
           
