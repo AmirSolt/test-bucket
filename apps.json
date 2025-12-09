@@ -1,0 +1,149 @@
+﻿{
+    "0ad": {
+        "version": "0.27.1",
+        "description": "Free and open source strategy game of ancient warfare",
+        "homepage": "https://play0ad.com/",
+        "license": {
+            "identifier": "Freeware",
+            "url": "https://github.com/0ad/0ad/blob/master/LICENSE.txt"
+        },
+        "url": "https://releases.wildfiregames.com/0ad-0.27.1-win32.exe#/setup.exe",
+        "hash": "sha1:498cf55ef98c497055c9181b674de39fad4cea7e",
+        "installer": {
+            "script": "Start-Process -FilePath \"$dir\\setup.exe\" -ArgumentList \"/S\", \"/D=$dir\" -Wait"
+        },
+        "bin": "binaries\\system\\pyrogenesis.exe",
+        "uninstaller": {
+            "script": "Start-Process -FilePath \"$dir\\Uninstall.exe\" -ArgumentList /S -Wait"
+        },
+        "checkver": {
+            "url": "https://play0ad.com/download/win/",
+            "regex": "0ad-([\\w.]+)-win32.exe"
+        },
+        "autoupdate": {
+            "url": "https://releases.wildfiregames.com/0ad-$version-win32.exe#/setup.exe",
+            "hash": {
+                "url": "$url.sha1sum"
+            }
+        }
+    },
+    "2ship2harkinian": {
+        "version": "3.0.1",
+        "description": "A PC port of Legend of Zelda: Majora\u0027s Mask",
+        "homepage": "https://www.shipofharkinian.com",
+        "license": "CC0-1.0",
+        "notes": [
+            "2 Ship 2 Harkinian requires specific ROM(s) of Majora\u0027s Mask to function.",
+            "Learn more at https://www.shipofharkinian.com/setup-guide and https://2ship.equipment."
+        ],
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/HarbourMasters/2ship2harkinian/releases/download/3.0.1/2Ship-Mion-Bravo-Win64.zip",
+                "hash": "4695cda83398a8db4825f36609c77f3714deb5f352b4071596157af3e278d358"
+            }
+        },
+        "pre_install": [
+            "\u00272ship2harkinian.json\u0027, \u0027imgui.ini\u0027 | % {",
+            "   if (!(Test-Path \"$persist_dir\\$_\")) {",
+            "      New-Item \"$dir\\$_\" | Out-Null",
+            "   }",
+            "}"
+        ],
+        "post_install": [
+            "if (Test-Path \"$persist_dir\\mm.o2r\") {",
+            "    Copy-Item \"$persist_dir\\mm.o2r\" \"$dir\\mm.o2r\" -Force",
+            "}"
+        ],
+        "shortcuts": [
+            [
+                "2ship.exe",
+                "2 Ship 2 Harkinian"
+            ]
+        ],
+        "persist": [
+            "logs",
+            "mods",
+            "saves",
+            "2ship2harkinian.json",
+            "imgui.ini"
+        ],
+        "pre_uninstall": [
+            "if (Test-Path \"$dir\\mm.o2r\") {",
+            "    Copy-Item \"$dir\\mm.o2r\" \"$persist_dir\\mm.o2r\" -Force",
+            "}"
+        ],
+        "checkver": {
+            "github": "https://github.com/HarbourMasters/2ship2harkinian/",
+            "regex": "(?\u003cmajorName\u003e(\\w+))\\s(?\u003cminorName\u003e(\\w+))\\s(?\u003cversion\u003e([\\d\\.]+))",
+            "replace": "${version}"
+        },
+        "autoupdate": {
+            "architecture": {
+                "64bit": {
+                    "url": "https://github.com/HarbourMasters/2ship2harkinian/releases/download/$version/2Ship-$matchMajorname-$matchMinorname-Win64.zip"
+                }
+            }
+        }
+    },
+    "actools": {
+        "version": "0.8.2782.39874",
+        "description": "Alternative launcher for Assetto Corsa named Content Manager, and some utils as well",
+        "homepage": "https://github.com/gro-ove/actools",
+        "license": "MS-PL",
+        "url": "https://github.com/gro-ove/actools/releases/download/v0.8.2782.39874/Content.Manager.zip",
+        "hash": "67998c57fc520946f4041152dc3a1f3d5558d4da8062630e9079e31061a21f68",
+        "post_install": [
+            "$WshShell = New-Object -ComObject WScript.Shell",
+            "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath(\u0027Desktop\u0027) + \u0027\\\u0027 + $manifest.shortcuts[0][0] + \u0027.lnk\u0027)",
+            "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+            "$Shortcut.Description = \"id=$app;installer=scoop\"",
+            "$Shortcut.Save()"
+        ],
+        "pre_uninstall": [
+            "Remove-Item -Path (Join-Path ([Environment]::GetFolderPath(\u0027Desktop\u0027)) ($manifest.shortcuts[0][0] + \u0027.lnk\u0027)) -ErrorAction SilentlyContinue"
+        ],
+        "shortcuts": [
+            [
+                "Content Manager.exe",
+                "Assetto Corsa Content Manager"
+            ]
+        ],
+        "checkver": "github",
+        "autoupdate": {
+            "url": "https://github.com/gro-ove/actools/releases/download/v$version/Content.Manager.zip"
+        }
+    },
+    "adom": {
+        "version": "3.3.3",
+        "description": "A roguelike with a mix of story, RPG, exploration, and strategic and flexible combat.",
+        "homepage": "https://www.adom.de/home",
+        "license": "Custom",
+        "url": "https://www.adom.de/home/download/current/adom_windows_3.3.3.zip",
+        "hash": "679182edf2df02cabbacf11a3b432ed087ccedda4323491e170be14a93114549",
+        "extract_dir": "adom",
+        "bin": "adom.exe",
+        "post_install": [
+            "$WshShell = New-Object -ComObject WScript.Shell",
+            "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath(\u0027Desktop\u0027) + \u0027\\\u0027 + $manifest.shortcuts[0][0] + \u0027.lnk\u0027)",
+            "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
+            "$Shortcut.Description = \"id=$app;installer=scoop\"",
+            "$Shortcut.Save()"
+        ],
+        "pre_uninstall": [
+            "Remove-Item -Path (Join-Path ([Environment]::GetFolderPath(\u0027Desktop\u0027)) ($manifest.shortcuts[0][0] + \u0027.lnk\u0027)) -ErrorAction SilentlyContinue"
+        ],
+        "shortcuts": [
+            [
+                "adom.exe",
+                "Ancient Domains of Mystery (ASCII)"
+            ]
+        ],
+        "checkver": {
+            "url": "https://www.adom.de/home/downloads.html",
+            "re": "Version ([\\d.]+)"
+        },
+        "autoupdate": {
+            "url": "https://www.adom.de/home/download/current/adom_windows_$version.zip"
+        }
+    }
+}
