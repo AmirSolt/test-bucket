@@ -11,7 +11,7 @@
         "$WshShell = New-Object -ComObject WScript.Shell",
         "$Shortcut = $WshShell.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\\' + $manifest.shortcuts[0][0] + '.lnk')",
         "$Shortcut.TargetPath = Join-Path $dir $manifest.shortcuts[0][0]",
-        "$Shortcut.Description = \"id=$app\"",
+        "$Shortcut.Description = \"id=$app;installer=scoop\"",
         "$Shortcut.Save()"
     ],
     "pre_uninstall": [
