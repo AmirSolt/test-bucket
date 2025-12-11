@@ -118,6 +118,7 @@
                 },
     "adom":  {
                  "version":  "3.3.3",
+                 "iconUrl":  "https://www.adom.de/home/img/icon/favicon-96x96.png",
                  "priority":  1,
                  "description":  "A roguelike with a mix of story, RPG, exploration, and strategic and flexible combat.",
                  "homepage":  "https://www.adom.de/home",
