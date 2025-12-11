@@ -1,5 +1,6 @@
 {
     "version": "3.0.1",
+    "priority": 3,
     "description": "A PC port of Legend of Zelda: Majora's Mask",
     "homepage": "https://www.shipofharkinian.com",
     "license": "CC0-1.0",

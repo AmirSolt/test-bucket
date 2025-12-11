@@ -1,5 +1,6 @@
 {
     "version": "3.3.3",
+    "priority": 1,
     "description": "A roguelike with a mix of story, RPG, exploration, and strategic and flexible combat.",
     "homepage": "https://www.adom.de/home",
     "license": "Custom",
